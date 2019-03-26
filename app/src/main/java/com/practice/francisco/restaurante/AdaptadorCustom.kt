@@ -73,7 +73,20 @@ class AdaptadorCustom(var contexto: Context, items:ArrayList<Platillo>, var list
         }
     }
 
+    fun obtenerNumeroElementosSeleccionados():Int{
+        return itemsSeleccionados?.count()!!
+    }
 
+    fun eliminarSeleccionados(){
+        if (itemsSeleccionados?.count()!!>0){
+            var itemsEliminados = ArrayList<Platillo>()
+            for (index in itemsSeleccionados!!){
+                itemsEliminados.add(items?.get(index)!!)
+            }
+            items?.removeAll(itemsEliminados)
+            itemsSeleccionados?.clear()
+        }
+    }
 
     class ViewHolder(vista:View, listener: ClickListener, longClickListener: LongClickListener):RecyclerView.ViewHolder(vista), View.OnClickListener, View.OnLongClickListener{
         var vista = vista

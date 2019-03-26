@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     var layoutManager:RecyclerView.LayoutManager? = null
 
     var isActionMode = false
+    var actionMode:ActionMode? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,19 +43,34 @@ class MainActivity : AppCompatActivity() {
 
         val callback = object: ActionMode.Callback{
             override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                when(item?.itemId){
+                    R.id.iEliminar ->{
+                        //Toast.makeText(applicationContext, "Eliminar", Toast.LENGTH_SHORT).show()
+                        adaptador?.eliminarSeleccionados()
+                    }
+                    else ->{
+                        return true
+                    }
+                }
                 adaptador?.terminarActionMode()
                 mode?.finish()
                 isActionMode = false
+
+
                 return true
             }
 
             override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
                 //Inicializacion de Action Mode
                 adaptador?.iniciarActionMode()
+                actionMode = mode
+                //inflate menu
+                menuInflater.inflate(R.menu.menu_contextual, menu)
                 return true
             }
 
             override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                mode?.title = "0 seleccionados"
                 return false
             }
 
@@ -80,6 +96,7 @@ class MainActivity : AppCompatActivity() {
                     //hacer selecciones o deselecciones
                     adaptador?.seleccionarItem(index)
                 }
+                actionMode?.title = adaptador?.obtenerNumeroElementosSeleccionados().toString()+" seleccionados"
             }
 
         })
